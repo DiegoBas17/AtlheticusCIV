@@ -25,6 +25,7 @@ public class Atleta implements UserDetails {
     private String nome;
     private String cognome;
     private String email;
+    @Column(name = "numero_telefono")
     private String numeroTelefono;
     private String password;
     private String avatar;
