@@ -1,6 +1,10 @@
 package diego.basili.AtlheticusCIV.security;
 
 
+import diego.basili.AtlheticusCIV.entities.Atleta;
+import diego.basili.AtlheticusCIV.exceptions.UnauthorizedException;
+import diego.basili.AtlheticusCIV.repositories.AtletiRepository;
+import diego.basili.AtlheticusCIV.services.AtletiService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -21,7 +25,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
     @Autowired
     private JWTTools jwtTools;
     @Autowired
-    private UsersService usersService;
+    private AtletiService atletiService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -32,7 +36,7 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         System.out.println("ACCESS TOKEN " + accessToken);
         jwtTools.verifyToken(accessToken);
         String id = jwtTools.extractIdFromToken(accessToken);
-        User currentUser = this.usersService.findById(UUID.fromString(id));
+        Atleta currentUser = this.atletiService.findById(UUID.fromString(id));
         Authentication authentication = new UsernamePasswordAuthenticationToken(currentUser, null, currentUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);

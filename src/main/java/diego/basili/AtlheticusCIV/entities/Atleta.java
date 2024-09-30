@@ -1,8 +1,13 @@
 package diego.basili.AtlheticusCIV.entities;
 
+import diego.basili.AtlheticusCIV.enums.Ruolo;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 
@@ -12,7 +17,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @Table(name = "atleti")
-public class Atleta {
+public class Atleta implements UserDetails {
     @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue
@@ -21,6 +26,9 @@ public class Atleta {
     private String cognome;
     private String email;
     private String numeroTelefono;
+    private String password;
+    private String avatar;
+    private Ruolo ruolo;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "valutazione_id")
@@ -37,4 +45,24 @@ public class Atleta {
             inverseJoinColumns = @JoinColumn(name = "partita_id")
     )
     private List<Partita> partite;
+
+    public Atleta(String nome, String cognome, String numeroTelefono, String email, String password, String avatar, Ruolo ruolo) {
+        this.nome = nome;
+        this.cognome = cognome;
+        this.numeroTelefono = numeroTelefono;
+        this.email = email;
+        this.password = password;
+        this.avatar = avatar;
+        this.ruolo = ruolo;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority(ruolo.name()));
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
 }
