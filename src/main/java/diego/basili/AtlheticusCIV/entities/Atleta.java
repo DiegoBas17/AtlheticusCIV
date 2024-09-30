@@ -1,5 +1,6 @@
 package diego.basili.AtlheticusCIV.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import diego.basili.AtlheticusCIV.enums.Ruolo;
 import jakarta.persistence.*;
 import lombok.*;
@@ -29,16 +30,20 @@ public class Atleta implements UserDetails {
     private String numeroTelefono;
     private String password;
     private String avatar;
+    @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "valutazione_id")
+    @JsonIgnore
     private Valutazione valutazione;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "statistica_id")
     private Statistica statistica;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "atleta_partita",

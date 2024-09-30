@@ -21,6 +21,7 @@ public class Partita {
     private UUID id;
     private LocalDate data;
     private String luogo;
+    @Enumerated(EnumType.STRING)
     private TipoPartita tipoPartita;
 
     @ManyToMany(mappedBy = "partite")
