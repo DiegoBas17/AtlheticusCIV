@@ -1,10 +1,7 @@
 package diego.basili.AtlheticusCIV.entities;
 
 import diego.basili.AtlheticusCIV.enums.TipoPartita;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
@@ -35,5 +32,7 @@ public class Tracker {
     private Double valutazione5Stelle;
     private String analisiAllenatore;
 
-    /*tracker manytoone statistica*/
+    @ManyToOne
+    @JoinColumn(name = "statistica_id")
+    private Statistica statistica;
 }

@@ -1,13 +1,11 @@
 package diego.basili.AtlheticusCIV.entities;
 
 import diego.basili.AtlheticusCIV.enums.TipoPartita;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -25,5 +23,9 @@ public class Partita {
     private String luogo;
     private TipoPartita tipoPartita;
 
-    /*partita manytomany atleti*/
+    @ManyToMany(mappedBy = "partite")
+    private List<Atleta> atleti;
+
+    @OneToMany(mappedBy = "partita", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Voto> voti;
 }

@@ -1,11 +1,9 @@
 package diego.basili.AtlheticusCIV.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -23,8 +21,13 @@ public class Statistica {
     private Long gol;
     private Long mediaGol;
 
-    /*statistica onetoone atleta*/
-    /*statistica onetomany voto*/
-    /*statistica onetomany tracker*/
+    @OneToOne(mappedBy = "statistica")
+    private Atleta atleta;
+
+    @OneToMany(mappedBy = "statistica", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Voto> voti;
+
+    @OneToMany(mappedBy = "statistica", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Tracker> trackers;
 
 }

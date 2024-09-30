@@ -3,6 +3,7 @@ package diego.basili.AtlheticusCIV.entities;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -22,11 +23,18 @@ public class Atleta {
     private String numeroTelefono;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "valutazione_id", referencedColumnName = "id")
+    @JoinColumn(name = "valutazione_id")
     private Valutazione valutazione;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "statistica_id", referencedColumnName = "id")
+    @JoinColumn(name = "statistica_id")
     private Statistica statistica;
-    /*collegamento manytomany con partite*/
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "atleta_partita",
+            joinColumns = @JoinColumn(name = "atleta_id"),
+            inverseJoinColumns = @JoinColumn(name = "partita_id")
+    )
+    private List<Partita> partite;
 }

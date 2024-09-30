@@ -1,9 +1,6 @@
 package diego.basili.AtlheticusCIV.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.UUID;
@@ -21,6 +18,11 @@ public class Voto {
     private UUID id;
     private Long voto;
 
-    /*voto manytoone partita*/
-    /*voto manytomany statistica*/
+    @ManyToOne
+    @JoinColumn(name = "partita_id")
+    private Partita partita;
+
+    @ManyToOne
+    @JoinColumn(name = "statistica_id")
+    private Statistica statistica;
 }
