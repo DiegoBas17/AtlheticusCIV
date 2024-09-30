@@ -3,7 +3,6 @@ package diego.basili.AtlheticusCIV.security;
 
 import diego.basili.AtlheticusCIV.entities.Atleta;
 import diego.basili.AtlheticusCIV.exceptions.UnauthorizedException;
-import diego.basili.AtlheticusCIV.repositories.AtletiRepository;
 import diego.basili.AtlheticusCIV.services.AtletiService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;

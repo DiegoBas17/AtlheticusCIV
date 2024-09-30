@@ -1,5 +1,9 @@
 package diego.basili.AtlheticusCIV.security;
 
+import diego.basili.AtlheticusCIV.entities.Atleta;
+import diego.basili.AtlheticusCIV.exceptions.UnauthorizedException;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -10,11 +14,11 @@ public class JWTTools {
     @Value("${jwt.secret}")
     private String secret;
 
-    public String createToken(User user) {
+    public String createToken(Atleta atleta) {
         return Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis()))
                 .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
-                .subject(String.valueOf(user.getId()))
+                .subject(String.valueOf(atleta.getId()))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
     }

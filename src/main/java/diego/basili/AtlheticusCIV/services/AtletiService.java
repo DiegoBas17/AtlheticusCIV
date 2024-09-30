@@ -41,7 +41,7 @@ public class AtletiService {
     }
 
     public Atleta findByEmail(String email) {
-        return atletiRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("L'utente con l'email " + email + " non è stato trovato!"));
+        return atletiRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("L'atleta con l'email " + email + " non è stato trovato!"));
     }
 
     public Page<Atleta> findAll(int page, int size, String sortBy) {
