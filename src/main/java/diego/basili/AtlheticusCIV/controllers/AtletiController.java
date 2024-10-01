@@ -11,10 +11,7 @@ import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -66,23 +63,21 @@ public class AtletiController {
 
     @PutMapping("/{atletaId}")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
-    public Atleta findByIdAndUpdate(@PathVariable UUID atletaId, @RequestBody @Validated AtletaDTO body, BindingResult validationResult) {
+    public Atleta findByIdAndUpdate(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @PathVariable UUID atletaId, @RequestBody @Validated AtletaDTO body, BindingResult validationResult) {
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()
                     .map(DefaultMessageSourceResolvable::getDefaultMessage)
                     .collect(Collectors.joining(". "));
             throw new BadRequestException("Ci sono stati errori nel payload. " + messages);
         }
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Atleta currentAtleta = atletiService.findByEmail(authentication.getName());
         Atleta targetAtleta = findById(atletaId);
-        if (currentAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.ADMIN && !currentAtleta.getId().equals(targetAtleta.getId())) {
+        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.ADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
             throw new UnauthorizedException("Gli amministratori non possono modificare altri amministratori.");
         }
-        if (currentAtleta.getRuolo() == Ruolo.SUPERADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN && !currentAtleta.getId().equals(targetAtleta.getId())) {
+        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.SUPERADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
             throw new UnauthorizedException("Gli superamministratori non possono modificare altri superamministratori.");
         }
-        if (currentAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN) {
+        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN) {
             throw new UnauthorizedException("Gli amministratori non possono modificare altri i superamministratori.");
         }
         return this.atletiService.findByIdAndUpdate(atletaId, body);
@@ -91,17 +86,15 @@ public class AtletiController {
     @DeleteMapping("/{atletaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
-    public void findByIdAndDelete(@PathVariable UUID atletaId) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Atleta currentAtleta = atletiService.findByEmail(authentication.getName());
+    public void findByIdAndDelete(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @PathVariable UUID atletaId) {
         Atleta targetAtleta = findById(atletaId);
-        if (currentAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.ADMIN && !currentAtleta.getId().equals(targetAtleta.getId())) {
+        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.ADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
             throw new UnauthorizedException("Gli amministratori non possono modificare altri amministratori.");
         }
-        if (currentAtleta.getRuolo() == Ruolo.SUPERADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN && !currentAtleta.getId().equals(targetAtleta.getId())) {
+        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.SUPERADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
             throw new UnauthorizedException("Gli superamministratori non possono modificare altri superamministratori.");
         }
-        if (currentAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN) {
+        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN) {
             throw new UnauthorizedException("Gli amministratori non possono modificare altri i superamministratori.");
         }
         this.atletiService.findByIdAndDelete(atletaId);
@@ -109,17 +102,15 @@ public class AtletiController {
 
     @PutMapping("/{atletaId}/avatar")
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
-    public Atleta uploadAvatar(@PathVariable UUID atletaId, @RequestParam("avatar") MultipartFile image) throws IOException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Atleta currentAtleta = atletiService.findByEmail(authentication.getName());
+    public Atleta uploadAvatar(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @PathVariable UUID atletaId, @RequestParam("avatar") MultipartFile image) throws IOException {
         Atleta targetAtleta = findById(atletaId);
-        if (currentAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.ADMIN && !currentAtleta.getId().equals(targetAtleta.getId())) {
+        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.ADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
             throw new UnauthorizedException("Gli amministratori non possono modificare altri amministratori.");
         }
-        if (currentAtleta.getRuolo() == Ruolo.SUPERADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN && !currentAtleta.getId().equals(targetAtleta.getId())) {
+        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.SUPERADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
             throw new UnauthorizedException("Gli superamministratori non possono modificare altri superamministratori.");
         }
-        if (currentAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN) {
+        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN) {
             throw new UnauthorizedException("Gli amministratori non possono modificare altri i superamministratori.");
         }
         return this.atletiService.uploadImage(atletaId, image);

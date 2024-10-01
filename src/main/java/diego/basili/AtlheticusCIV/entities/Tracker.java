@@ -32,7 +32,7 @@ public class Tracker {
     private Double valutazione5Stelle;
     private String analisiAllenatore;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "statistica_id")
     private Statistica statistica;
 }

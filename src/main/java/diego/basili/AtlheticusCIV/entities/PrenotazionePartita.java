@@ -1,5 +1,6 @@
 package diego.basili.AtlheticusCIV.entities;
 
+import diego.basili.AtlheticusCIV.enums.StatoPrenotazione;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,17 +11,19 @@ import java.util.UUID;
 @Setter
 @ToString
 @NoArgsConstructor
-@Table(name = "voti")
-public class Voto {
+@Table(name = "prenotazione_partite")
+public class PrenotazionePartita {
     @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue
     private UUID id;
-    private Long voto;
+    private StatoPrenotazione statoPrenotazione;
 
     @ManyToOne
     @JoinColumn(name = "atleta_id")
     private Atleta atleta;
 
-    /*voto manytoone statistica*/
+    @ManyToOne
+    @JoinColumn(name = "partita_id")
+    private Partita partita;
 }

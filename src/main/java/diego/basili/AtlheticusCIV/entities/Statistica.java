@@ -1,5 +1,6 @@
 package diego.basili.AtlheticusCIV.entities;
 
+import diego.basili.AtlheticusCIV.enums.TipoPartita;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,17 +18,20 @@ public class Statistica {
     @Id
     @GeneratedValue
     private UUID id;
-    private Long partiteGiocate;
+    private TipoPartita tipoPartita;
     private Long gol;
-    private Long mediaGol;
+    private Long assist;
 
-    @OneToOne(mappedBy = "statistica")
+    @ManyToOne
+    @JoinColumn(name = "partita_id")
+    private Partita partita;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "tracker_id")
+    private Tracker tracker;
+
+    @ManyToOne
+    @JoinColumn(name = "atleta_id")
     private Atleta atleta;
-
-    @OneToMany(mappedBy = "statistica", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Voto> voti;
-
-    @OneToMany(mappedBy = "statistica", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Tracker> trackers;
 
 }

@@ -30,27 +30,28 @@ public class Atleta implements UserDetails {
     private String numeroTelefono;
     private String password;
     private String avatar;
+    private Double mediaGol;
+    private Double mediaAssist;
+    private Long partiteGiocate;
+    private Double mediaVoti;
+    private Long totaleGol;
+    private Long totaleAssist;
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "valutazione_id")
-    @JsonIgnore
     private Valutazione valutazione;
 
-    @JsonIgnore
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "statistica_id")
-    private Statistica statistica;
+    @OneToMany(mappedBy = "atleta", cascade = CascadeType.ALL)
+    private List<PrenotazionePartita> prenotazioniPartite;
 
-    @JsonIgnore
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "atleta_partita",
-            joinColumns = @JoinColumn(name = "atleta_id"),
-            inverseJoinColumns = @JoinColumn(name = "partita_id")
-    )
-    private List<Partita> partite;
+    @OneToMany(mappedBy = "atleta", cascade = CascadeType.ALL)
+    private List<Voto> voti;
+
+    @OneToMany(mappedBy = "atleta", cascade = CascadeType.ALL)
+    private List<Statistica> statistiche;
+
 
     public Atleta(String nome, String cognome, String numeroTelefono, String email, String password, String avatar, Ruolo ruolo) {
         this.nome = nome;

@@ -24,9 +24,9 @@ public class Partita {
     @Enumerated(EnumType.STRING)
     private TipoPartita tipoPartita;
 
-    @ManyToMany(mappedBy = "partite")
-    private List<Atleta> atleti;
+    @OneToMany(mappedBy = "partita", cascade = CascadeType.ALL)
+    private List<PrenotazionePartita> prenotazioniPartite;
 
-    @OneToMany(mappedBy = "partita", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Voto> voti;
+    @OneToMany(mappedBy = "partita", cascade = CascadeType.ALL)
+    private List<Statistica> statistiche;
 }
