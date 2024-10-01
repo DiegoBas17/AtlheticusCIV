@@ -29,27 +29,32 @@ public class AtletiController {
 
     /*ME*/
     @GetMapping("/me")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public Atleta getProfile(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta) {
         return currentAuthenticatedAtleta;
     }
 
     @DeleteMapping("/me")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProfile(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta) {
         this.atletiService.findByIdAndDelete(currentAuthenticatedAtleta.getId());
     }
 
     @PutMapping("/me")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public Atleta updateProfile(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @RequestBody AtletaDTO body) {
         return this.atletiService.findByIdAndUpdate(currentAuthenticatedAtleta.getId(), body);
     }
 
     @PutMapping("/me/avatar")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public Atleta uploadMeAvatar(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @RequestParam("avatar") MultipartFile image) throws IOException {
         return this.atletiService.uploadImage(currentAuthenticatedAtleta.getId(), image);
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public Page<Atleta> findAll(@RequestParam(defaultValue = "0") int page,
                               @RequestParam(defaultValue = "10") int size,
                               @RequestParam(defaultValue = "id") String sortBy) {
@@ -57,6 +62,7 @@ public class AtletiController {
     }
 
     @GetMapping("/{atletaId}")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public Atleta findById(@PathVariable UUID atletaId) {
         return this.atletiService.findById(atletaId);
     }
