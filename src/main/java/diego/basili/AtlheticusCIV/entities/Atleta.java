@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -53,7 +54,7 @@ public class Atleta implements UserDetails {
     private List<Statistica> statistiche;
 
 
-    public Atleta(String nome, String cognome, String numeroTelefono, String email, String password, String avatar, Ruolo ruolo) {
+    public Atleta(String nome, String cognome, String numeroTelefono, String email, String password, String avatar, Ruolo ruolo, Valutazione valutazione) {
         this.nome = nome;
         this.cognome = cognome;
         this.numeroTelefono = numeroTelefono;
@@ -61,6 +62,16 @@ public class Atleta implements UserDetails {
         this.password = password;
         this.avatar = avatar;
         this.ruolo = ruolo;
+        this.mediaGol = 0.0;
+        this.mediaAssist = 0.0;
+        this.partiteGiocate = 0L;
+        this.mediaVoti = 0.0;
+        this.totaleGol = 0L;
+        this.totaleAssist = 0L;
+        this.valutazione = valutazione;
+        this.prenotazioniPartite = new ArrayList<>();
+        this.voti = new ArrayList<>();
+        this.statistiche = new ArrayList<>();
     }
 
     @Override
