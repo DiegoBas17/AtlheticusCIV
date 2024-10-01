@@ -3,11 +3,13 @@ package diego.basili.AtlheticusCIV.services;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import diego.basili.AtlheticusCIV.entities.Atleta;
+import diego.basili.AtlheticusCIV.entities.Valutazione;
 import diego.basili.AtlheticusCIV.enums.Ruolo;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.exceptions.NotFoundException;
 import diego.basili.AtlheticusCIV.payloads.AtletaDTO;
 import diego.basili.AtlheticusCIV.repositories.AtletiRepository;
+import diego.basili.AtlheticusCIV.repositories.ValutazioniRepository;
 import diego.basili.AtlheticusCIV.tools.MailgunSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -32,6 +34,8 @@ public class AtletiService {
     private MailgunSender mailgunSender;
     @Autowired
     private Cloudinary cloudinary;
+    @Autowired
+    private ValutazioniRepository valutazioniRepository;
 
     public Atleta saveAtleta(AtletaDTO body) {
         if (body == null) {
@@ -39,8 +43,10 @@ public class AtletiService {
         } else if (this.atletiRepository.existsByEmail(body.email())) {
             throw new BadRequestException("L'email " + body.email() + " è già in uso!");
         } else {
-            Ruolo ruolo = Ruolo.ATLETA;
-            Atleta atleta = new Atleta(body.nome(), body.cognome(), body.numeroDiCellulare(), body.email(), bcrypt.encode(body.password()), "https://ui-avatars.com/api/?name=" + body.nome() + "+" + body.cognome(), ruolo);
+            Ruolo ruolo = Ruolo.VISITATORE;
+            Valutazione valutazione = new Valutazione(0.0, 0.0,0.0,0.0,0.0);
+            valutazioniRepository.save(valutazione);
+            Atleta atleta = new Atleta(body.nome(), body.cognome(), body.numeroDiCellulare(), body.email(), bcrypt.encode(body.password()), "https://ui-avatars.com/api/?name=" + body.nome() + "+" + body.cognome(), ruolo, valutazione);
             atletiRepository.save(atleta);
             mailgunSender.sendRegistrationEmail(atleta);
             return atleta;

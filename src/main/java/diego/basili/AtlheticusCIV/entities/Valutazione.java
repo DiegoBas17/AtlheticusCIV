@@ -1,5 +1,6 @@
 package diego.basili.AtlheticusCIV.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,15 @@ public class Valutazione {
     private Double tiro;
     private Double tecnica;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "valutazione")
     private Atleta atleta;
+
+    public Valutazione(Double difesa, Double velocità, Double resistenza, Double tiro, Double tecnica) {
+        this.difesa = difesa;
+        this.velocità = velocità;
+        this.resistenza = resistenza;
+        this.tiro = tiro;
+        this.tecnica = tecnica;
+    }
 }
