@@ -1,6 +1,7 @@
 package diego.basili.AtlheticusCIV.controllers;
 
 import diego.basili.AtlheticusCIV.entities.Partita;
+import diego.basili.AtlheticusCIV.entities.PrenotazionePartita;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.payloads.NewEntityRespDTO;
 import diego.basili.AtlheticusCIV.payloads.PartitaDTO;
@@ -8,6 +9,7 @@ import diego.basili.AtlheticusCIV.repositories.PartiteRepository;
 import diego.basili.AtlheticusCIV.services.PartiteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,14 @@ import java.util.stream.Collectors;
 public class PartiteController {
     @Autowired
     private PartiteService partiteService;
+
+    @GetMapping
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
+    public Page<Partita> findAll(@RequestParam(defaultValue = "0") int page,
+                                             @RequestParam(defaultValue = "10") int size,
+                                             @RequestParam(defaultValue = "id") String sortBy) {
+        return this.partiteService.findAll(page, size, sortBy);
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)

@@ -1,5 +1,6 @@
 package diego.basili.AtlheticusCIV.entities;
 
+import diego.basili.AtlheticusCIV.enums.ColoreSquadra;
 import diego.basili.AtlheticusCIV.enums.TipoPartita;
 import jakarta.persistence.*;
 import lombok.*;
@@ -19,6 +20,7 @@ public class Statistica {
     @GeneratedValue
     private UUID id;
     private TipoPartita tipoPartita;
+    private ColoreSquadra coloreSquadra;
     private Long gol;
     private Long assist;
 
@@ -34,4 +36,14 @@ public class Statistica {
     @JoinColumn(name = "atleta_id")
     private Atleta atleta;
 
+    public Statistica(TipoPartita tipoPartita, ColoreSquadra coloreSquadra, Long gol, Long assist, Partita partita, Atleta atleta) {
+        this.tipoPartita = tipoPartita;
+        this.coloreSquadra = coloreSquadra;
+        this.gol = gol;
+        this.assist = assist;
+        this.partita = partita;
+        this.tracker = null;
+        this.atleta = atleta;
+
+    }
 }

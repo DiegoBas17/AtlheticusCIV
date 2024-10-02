@@ -92,4 +92,11 @@ public class AtletiService {
         atleta.setAvatar(url);
         return atletiRepository.save(atleta);
     }
+
+    public Atleta addStatistica (Atleta atleta) {
+        if (atleta == null) {
+            throw new BadRequestException("Atleta richiesto");
+        }
+        return atletiRepository.save(atleta);
+    }
 }

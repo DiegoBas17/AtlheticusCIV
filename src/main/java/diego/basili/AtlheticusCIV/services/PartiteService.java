@@ -11,9 +11,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
-
+@Service
 public class PartiteService {
     @Autowired
     private PartiteRepository partiteRepository;
@@ -50,8 +51,8 @@ public class PartiteService {
         partiteRepository.delete(ruolo);
     }
 
-    public Partita findByIdAndUpdate(UUID userId, PartitaDTO updateBody) {
-        Partita found = findById(userId);
+    public Partita findByIdAndUpdate(UUID partitaId, PartitaDTO updateBody) {
+        Partita found = findById(partitaId);
         TipoPartita tipoPartita;
         if (this.partiteRepository.existsByData(updateBody.data()) && !found.getData().equals(updateBody.data())) {
             throw new BadRequestException("L'email " + updateBody.data() + " è già in uso!");
@@ -68,4 +69,10 @@ public class PartiteService {
         }
     }
 
+    public Partita addStatistica(Partita updateBody) {
+        if (updateBody == null) {
+            throw new BadRequestException("partita richiesta");
+        }
+        return partiteRepository.save(updateBody);
+    }
 }
