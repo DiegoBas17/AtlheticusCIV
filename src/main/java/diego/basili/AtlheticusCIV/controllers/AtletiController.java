@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
@@ -47,7 +48,7 @@ public class AtletiController {
         return this.atletiService.findByIdAndUpdate(currentAuthenticatedAtleta.getId(), body);
     }
 
-    @PutMapping("/me/avatar")
+    @PutMapping(value = "/me/avatar", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public Atleta uploadMeAvatar(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @RequestParam("avatar") MultipartFile image) throws IOException {
         return this.atletiService.uploadImage(currentAuthenticatedAtleta.getId(), image);
@@ -78,13 +79,13 @@ public class AtletiController {
         }
         Atleta targetAtleta = findById(atletaId);
         if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.ADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
-            throw new UnauthorizedException("Gli amministratori non possono modificare altri amministratori.");
+            throw new BadRequestException("Gli amministratori non possono modificare altri amministratori.");
         }
         if (currentAuthenticatedAtleta.getRuolo() == Ruolo.SUPERADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
-            throw new UnauthorizedException("Gli superamministratori non possono modificare altri superamministratori.");
+            throw new BadRequestException("Gli superamministratori non possono modificare altri superamministratori.");
         }
         if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN) {
-            throw new UnauthorizedException("Gli amministratori non possono modificare altri i superamministratori.");
+            throw new BadRequestException("Gli amministratori non possono modificare altri i superamministratori.");
         }
         return this.atletiService.findByIdAndUpdate(atletaId, body);
     }

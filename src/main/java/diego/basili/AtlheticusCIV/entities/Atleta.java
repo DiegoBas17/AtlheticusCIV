@@ -44,12 +44,15 @@ public class Atleta implements UserDetails {
     @JoinColumn(name = "valutazione_id")
     private Valutazione valutazione;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "atleta", cascade = CascadeType.ALL)
     private List<PrenotazionePartita> prenotazioniPartite;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "atleta", cascade = CascadeType.ALL)
     private List<Voto> voti;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "atleta", cascade = CascadeType.ALL)
     private List<Statistica> statistiche;
 
