@@ -66,7 +66,6 @@ public class PartiteService {
             found.setTipoPartita(tipoPartita);
             return partiteRepository.save(found);
         }
-
     }
 
 }

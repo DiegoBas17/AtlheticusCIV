@@ -26,4 +26,10 @@ public class PrenotazionePartita {
     @ManyToOne
     @JoinColumn(name = "partita_id")
     private Partita partita;
+
+    public PrenotazionePartita(Atleta atleta, Partita partita, StatoPrenotazione statoPrenotazione) {
+        this.atleta = atleta;
+        this.partita = partita;
+        this.statoPrenotazione = statoPrenotazione;
+    }
 }
