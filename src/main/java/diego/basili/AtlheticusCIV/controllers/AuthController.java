@@ -4,7 +4,7 @@ import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.payloads.AtletaDTO;
 import diego.basili.AtlheticusCIV.payloads.AtletaLoginDTO;
 import diego.basili.AtlheticusCIV.payloads.AtletaLoginRespDTO;
-import diego.basili.AtlheticusCIV.payloads.AtletaRespDTO;
+import diego.basili.AtlheticusCIV.payloads.NewEntityRespDTO;
 import diego.basili.AtlheticusCIV.services.AtletiService;
 import diego.basili.AtlheticusCIV.services.AuthService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,14 +32,14 @@ public class AuthController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public AtletaRespDTO save(@RequestBody @Validated AtletaDTO body, BindingResult validationResult) {
+    public NewEntityRespDTO save(@RequestBody @Validated AtletaDTO body, BindingResult validationResult) {
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()
                     .map(objectError -> objectError.getDefaultMessage())
                     .collect(Collectors.joining(". "));
             throw new BadRequestException("Ci sono stati errori nel payload. " + messages);
         } else {
-            return new AtletaRespDTO(this.atletiService.saveAtleta(body).getId());
+            return new NewEntityRespDTO(this.atletiService.saveAtleta(body).getId());
         }
 
     }
