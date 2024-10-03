@@ -86,11 +86,16 @@ public class AtletiService {
         }
     }
 
-    public Atleta uploadImage(UUID atletaId, MultipartFile file) throws IOException {
-        Atleta atleta = findById(atletaId);
-        String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
-        atleta.setAvatar(url);
-        return atletiRepository.save(atleta);
+    public Atleta uploadImage(UUID atletaId, MultipartFile file) {
+        try {
+            Atleta atleta = findById(atletaId);
+            String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+            atleta.setAvatar(url);
+            return atletiRepository.save(atleta);
+        } catch (IOException e ) {
+            throw new BadRequestException("Errore nel caricamento del file, verifica il formato o le dimensioni!");
+        }
+
     }
 
     public Atleta addStatistica (Atleta atleta) {
