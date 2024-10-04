@@ -1,4 +1,7 @@
 package diego.basili.AtlheticusCIV.payloads;
 
-public record AtletaLoginRespDTO(String accessToken) {
+import diego.basili.AtlheticusCIV.entities.Atleta;
+
+public record AtletaLoginRespDTO(String accessToken,
+                                 Atleta atleta) {
 }

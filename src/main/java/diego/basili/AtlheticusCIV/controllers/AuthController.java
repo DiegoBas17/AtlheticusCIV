@@ -1,5 +1,6 @@
 package diego.basili.AtlheticusCIV.controllers;
 
+import diego.basili.AtlheticusCIV.entities.Atleta;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.payloads.AtletaDTO;
 import diego.basili.AtlheticusCIV.payloads.AtletaLoginDTO;
@@ -25,8 +26,9 @@ public class AuthController {
     private AtletiService atletiService;
 
     @PostMapping("/login")
-    public AtletaLoginRespDTO login(@RequestBody AtletaLoginDTO payload) {
-        return new AtletaLoginRespDTO(this.authService.checkCredentialsAndGenerateToken(payload));
+    public AtletaLoginRespDTO login(@RequestBody @Validated AtletaLoginDTO payload) {
+        Atleta atleta = atletiService.findByEmail(payload.email());
+        return new AtletaLoginRespDTO(this.authService.checkCredentialsAndGenerateToken(payload), atleta);
     }
 
 

@@ -57,7 +57,7 @@ public class AtletiController {
     @GetMapping
     @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public Page<Atleta> findAll(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "10") int size,
+                              @RequestParam(defaultValue = "50") int size,
                               @RequestParam(defaultValue = "id") String sortBy) {
         return this.atletiService.findAll(page, size, sortBy);
     }
