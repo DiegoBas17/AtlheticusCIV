@@ -36,7 +36,7 @@ public class TrackesController {
 
     @PostMapping("/{statisticaId}")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public NewEntityRespDTO save(@PathVariable UUID statisticaId, @RequestBody @Validated TrackerDTO body, BindingResult validationResult){
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()
