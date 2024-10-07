@@ -35,6 +35,11 @@ public class PrenotazioniPartiteService {
 
     public PrenotazionePartita savePrenotazione(Atleta atleta, UUID partitaId) {
         Partita partita = partiteService.findById(partitaId);
+        boolean prenotazioneEffettuata = partita.getPrenotazioniPartite().stream()
+                .anyMatch(prenotazionePartita -> prenotazionePartita.getAtleta().getId().equals(atleta.getId()));
+        if (prenotazioneEffettuata) {
+            throw new BadRequestException("Sei gia prenotato per questa partita");
+        }
         StatoPrenotazione statoPrenotazione;
         if (atleta.getRuolo() == Ruolo.VISITATORE) {
             statoPrenotazione = StatoPrenotazione.ATTESA;

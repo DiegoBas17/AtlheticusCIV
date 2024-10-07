@@ -30,7 +30,7 @@ public class PrenotazioniPartiteController {
     @GetMapping
     @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public Page<PrenotazionePartita> findAll(@RequestParam(defaultValue = "0") int page,
-                                @RequestParam(defaultValue = "10") int size,
+                                @RequestParam(defaultValue = "20") int size,
                                 @RequestParam(defaultValue = "id") String sortBy) {
         return this.prenotazioniPartiteService.findAll(page, size, sortBy);
     }

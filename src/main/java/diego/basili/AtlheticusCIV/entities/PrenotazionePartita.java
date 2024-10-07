@@ -1,5 +1,6 @@
 package diego.basili.AtlheticusCIV.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import diego.basili.AtlheticusCIV.enums.StatoPrenotazione;
 import jakarta.persistence.*;
 import lombok.*;
@@ -23,6 +24,7 @@ public class PrenotazionePartita {
     @JoinColumn(name = "atleta_id")
     private Atleta atleta;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "partita_id")
     private Partita partita;
