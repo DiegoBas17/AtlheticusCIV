@@ -35,4 +35,22 @@ public class Tracker {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "statistica_id")
     private Statistica statistica;
+
+    public Tracker(TipoPartita tipoPartita, Double attività, Double distanza, Long passaggi, String corsa, Long numeroSprint, Double sprintMedio, Double sprintMassimo, String possesso, Long tiri, Double tiroMassimo, Double tiroMedio, Double valutazione5Stelle, String analisiAllenatore, Statistica statistica) {
+        this.tipoPartita = tipoPartita;
+        this.attività = attività;
+        this.distanza = distanza;
+        this.passaggi = passaggi;
+        this.corsa = corsa;
+        this.numeroSprint = numeroSprint;
+        this.sprintMedio = sprintMedio;
+        this.sprintMassimo = sprintMassimo;
+        this.possesso = possesso;
+        this.tiri = tiri;
+        this.tiroMassimo = tiroMassimo;
+        this.tiroMedio = tiroMedio;
+        this.valutazione5Stelle = valutazione5Stelle;
+        this.analisiAllenatore = analisiAllenatore;
+        this.statistica = statistica;
+    }
 }
