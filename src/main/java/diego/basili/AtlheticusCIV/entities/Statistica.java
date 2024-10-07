@@ -5,6 +5,7 @@ import diego.basili.AtlheticusCIV.enums.TipoPartita;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -36,6 +37,9 @@ public class Statistica {
     @JoinColumn(name = "atleta_id")
     private Atleta atleta;
 
+    @OneToMany(mappedBy = "statistica", cascade = CascadeType.ALL)
+    private List<Voto> voti;
+
     public Statistica(TipoPartita tipoPartita, ColoreSquadra coloreSquadra, Long gol, Long assist, Partita partita, Atleta atleta) {
         this.tipoPartita = tipoPartita;
         this.coloreSquadra = coloreSquadra;
@@ -44,6 +48,6 @@ public class Statistica {
         this.partita = partita;
         this.tracker = null;
         this.atleta = atleta;
-
+        this.voti = new ArrayList<>();
     }
 }

@@ -22,5 +22,13 @@ public class Voto {
     @JoinColumn(name = "atleta_id")
     private Atleta atleta;
 
-    /*voto manytoone statistica*/
+    @ManyToOne
+    @JoinColumn(name = "statistica_id")
+    private Statistica statistica;
+
+    public Voto(Long voto, Statistica statistica, Atleta atleta) {
+        this.voto = voto;
+        this.statistica = statistica;
+        this.atleta = atleta;
+    }
 }
