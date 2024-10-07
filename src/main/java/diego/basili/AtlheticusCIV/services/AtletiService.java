@@ -34,8 +34,7 @@ public class AtletiService {
     private MailgunSender mailgunSender;
     @Autowired
     private Cloudinary cloudinary;
-    @Autowired
-    private ValutazioniRepository valutazioniRepository;
+
 
     public Atleta saveAtleta(AtletaDTO body) {
         if (body == null) {
@@ -44,9 +43,9 @@ public class AtletiService {
             throw new BadRequestException("L'email " + body.email() + " è già in uso!");
         } else {
             Ruolo ruolo = Ruolo.VISITATORE;
-            Valutazione valutazione = new Valutazione(0.0, 0.0,0.0,0.0,0.0);
-            valutazioniRepository.save(valutazione);
-            Atleta atleta = new Atleta(body.nome(), body.cognome(), body.numeroDiCellulare(), body.email(), bcrypt.encode(body.password()), "https://ui-avatars.com/api/?name=" + body.nome() + "+" + body.cognome(), ruolo, valutazione);
+            /*Valutazione valutazione = new Valutazione(0.0, 0.0,0.0,0.0,0.0);
+            valutazioniRepository.save(valutazione);*/
+            Atleta atleta = new Atleta(body.nome(), body.cognome(), body.numeroDiCellulare(), body.email(), bcrypt.encode(body.password()), "https://ui-avatars.com/api/?name=" + body.nome() + "+" + body.cognome(), ruolo);
             atletiRepository.save(atleta);
             mailgunSender.sendRegistrationEmail(atleta);
             return atleta;
