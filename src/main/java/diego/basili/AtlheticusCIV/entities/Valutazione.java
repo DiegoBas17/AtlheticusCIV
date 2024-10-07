@@ -27,11 +27,12 @@ public class Valutazione {
     @OneToOne(mappedBy = "valutazione")
     private Atleta atleta;
 
-    public Valutazione(Double difesa, Double velocità, Double resistenza, Double tiro, Double tecnica) {
+    public Valutazione(Double difesa, Double velocità, Double resistenza, Double tiro, Double tecnica, Atleta atleta) {
         this.difesa = difesa;
         this.velocità = velocità;
         this.resistenza = resistenza;
         this.tiro = tiro;
         this.tecnica = tecnica;
+        this.atleta = atleta;
     }
 }

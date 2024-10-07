@@ -57,7 +57,7 @@ public class Atleta implements UserDetails {
     private List<Statistica> statistiche;
 
 
-    public Atleta(String nome, String cognome, String numeroTelefono, String email, String password, String avatar, Ruolo ruolo, Valutazione valutazione) {
+    public Atleta(String nome, String cognome, String numeroTelefono, String email, String password, String avatar, Ruolo ruolo) {
         this.nome = nome;
         this.cognome = cognome;
         this.numeroTelefono = numeroTelefono;
@@ -71,7 +71,6 @@ public class Atleta implements UserDetails {
         this.mediaVoti = 0.0;
         this.totaleGol = 0L;
         this.totaleAssist = 0L;
-        this.valutazione = valutazione;
         this.prenotazioniPartite = new ArrayList<>();
         this.voti = new ArrayList<>();
         this.statistiche = new ArrayList<>();
