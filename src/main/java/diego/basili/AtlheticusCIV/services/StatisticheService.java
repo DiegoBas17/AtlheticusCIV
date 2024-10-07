@@ -57,8 +57,8 @@ public class StatisticheService {
         return statistiche;
     }
 
-    public Statistica findById(UUID ruoloId) {
-        return statisticheRepository.findById(ruoloId).orElseThrow(() -> new NotFoundException(ruoloId));
+    public Statistica findById(UUID statisticaId) {
+        return statisticheRepository.findById(statisticaId).orElseThrow(() -> new NotFoundException(statisticaId));
     }
 
     public void delete(UUID statistica_Id) {
@@ -66,12 +66,26 @@ public class StatisticheService {
         statisticheRepository.delete(statistica);
     }
 
-    /*public Statistica findByUpdate(UUID partitaId, StatisticaDTO body) {
-        Partita partita = partiteService.findById(partitaId);
-        List<PrenotazionePartita> prenotazioni = partita.getPrenotazioniPartite();
-        if (prenotazioni.isEmpty()) {
-            throw new BadRequestException("Nessun atleta trovato per la partita.");
+    public Statistica findByUpdate(UUID statisticaId, StatisticaDTO body) {
+        Statistica statistica = findById(statisticaId);
+        ColoreSquadra coloreSquadra;
+        try {
+            coloreSquadra = ColoreSquadra.valueOf(body.coloreSquadra());
         }
-
-    }*/
+        catch (IllegalArgumentException e) {
+            throw new BadRequestException("Colore squadra non valido!");
+        }
+        TipoPartita tipoPartita;
+        try {
+            tipoPartita = TipoPartita.valueOf(body.tipoPartita());
+        }
+        catch (IllegalArgumentException e) {
+            throw new BadRequestException("Tipo partita non valido!");
+        }
+        statistica.setAssist(body.assist());
+        statistica.setGol(body.gol());
+        statistica.setColoreSquadra(coloreSquadra);
+        statistica.setTipoPartita(tipoPartita);
+        return statisticheRepository.save(statistica);
+    }
 }
