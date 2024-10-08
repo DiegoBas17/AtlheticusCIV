@@ -8,7 +8,6 @@ import diego.basili.AtlheticusCIV.enums.ColoreSquadra;
 import diego.basili.AtlheticusCIV.enums.TipoPartita;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.exceptions.NotFoundException;
-import diego.basili.AtlheticusCIV.payloads.PartitaDTO;
 import diego.basili.AtlheticusCIV.payloads.StatisticaDTO;
 import diego.basili.AtlheticusCIV.repositories.StatisticheRepository;
 import org.springframework.beans.factory.annotation.Autowired;

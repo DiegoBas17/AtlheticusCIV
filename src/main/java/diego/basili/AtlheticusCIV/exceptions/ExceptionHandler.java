@@ -1,5 +1,6 @@
 package diego.basili.AtlheticusCIV.exceptions;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -35,5 +36,11 @@ public class ExceptionHandler {
     public ErrorsPayload handleGenericErrors(Exception ex) {
         ex.printStackTrace(); // Non dimentichiamoci che è ESTREMAMENTE UTILE sapere dove è stato generata l'eccezione per poterla fixare
         return new ErrorsPayload("Problema lato server, giuro che lo risolveremo presto!", LocalDateTime.now());
+    }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler({UnauthorizedException.class, ExpiredJwtException.class})
+    @ResponseStatus(HttpStatus.UNAUTHORIZED) // 401
+    public ErrorsPayload handleUnauthorized(UnauthorizedException ex) {
+        return new ErrorsPayload("Non hai i permessi per accedere", LocalDateTime.now());
     }
 }
