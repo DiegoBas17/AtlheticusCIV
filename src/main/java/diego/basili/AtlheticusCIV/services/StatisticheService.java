@@ -49,7 +49,7 @@ public class StatisticheService {
             statisticheRepository.save(statistica);
             statistiche.add(statistica);
             atleta.getStatistiche().add(statistica);
-            atletiService.addStatistica(atleta);
+            atletiService.addStatistica(atleta, statistica);
             partita.getStatistiche().add(statistica);
             partiteService.addStatistica(partita);
         });
@@ -86,5 +86,9 @@ public class StatisticheService {
         statistica.setColoreSquadra(coloreSquadra);
         statistica.setTipoPartita(tipoPartita);
         return statisticheRepository.save(statistica);
+    }
+
+    public List<Statistica> findByAtletaId(UUID atletaId) {
+        return this.statisticheRepository.findByAtletaId(atletaId);
     }
 }
