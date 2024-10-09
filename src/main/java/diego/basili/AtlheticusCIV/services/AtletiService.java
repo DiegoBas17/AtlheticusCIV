@@ -3,6 +3,7 @@ package diego.basili.AtlheticusCIV.services;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import diego.basili.AtlheticusCIV.entities.Atleta;
+import diego.basili.AtlheticusCIV.entities.Statistica;
 import diego.basili.AtlheticusCIV.entities.Valutazione;
 import diego.basili.AtlheticusCIV.enums.Ruolo;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
@@ -97,10 +98,16 @@ public class AtletiService {
 
     }
 
-    public Atleta addStatistica (Atleta atleta) {
-        if (atleta == null) {
-            throw new BadRequestException("Atleta richiesto");
+    public Atleta addStatistica (Atleta atleta, Statistica statistica) {
+        if (atleta == null || statistica == null) {
+            throw new BadRequestException("Atleta e Statistica richiesti");
         }
+        atleta.setTotaleGol(atleta.getTotaleGol() + statistica.getGol());
+        atleta.setTotaleAssist(atleta.getTotaleAssist() + statistica.getAssist());
+        atleta.setPartiteGiocate(atleta.getPartiteGiocate() + 1);
+        atleta.setMediaGol(atleta.getTotaleGol() / atleta.getPartiteGiocate().doubleValue());
+        atleta.setMediaAssist(atleta.getTotaleAssist() / atleta.getPartiteGiocate().doubleValue());
+        atleta.getStatistiche().add(statistica);
         return atletiRepository.save(atleta);
     }
 }
