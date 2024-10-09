@@ -29,6 +29,7 @@ public class Atleta implements UserDetails {
     private String email;
     @Column(name = "numero_telefono")
     private String numeroTelefono;
+    @JsonIgnore
     private String password;
     private String avatar;
     private Double mediaGol;
