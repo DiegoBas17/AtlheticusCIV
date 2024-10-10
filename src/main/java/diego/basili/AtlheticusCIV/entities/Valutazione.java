@@ -24,8 +24,13 @@ public class Valutazione {
     private int tecnica;
 
     @JsonIgnore
-    @OneToOne(mappedBy = "valutazione")
-    private Atleta atleta;
+    @OneToOne(mappedBy = "valutazioneAdmin", cascade = CascadeType.ALL)
+    private Atleta atletaAdmin;
+
+    @JsonIgnore
+    @OneToOne(mappedBy = "valutazioneCIV", cascade = CascadeType.ALL)
+    private Atleta atletaCiv;
+
 
     public Valutazione(int difesa, int velocità, int resistenza, int tiro, int tecnica, Atleta atleta) {
         this.difesa = difesa;
@@ -33,6 +38,6 @@ public class Valutazione {
         this.resistenza = resistenza;
         this.tiro = tiro;
         this.tecnica = tecnica;
-        this.atleta = atleta;
+        this.atletaAdmin = atleta;
     }
 }

@@ -45,6 +45,7 @@ public class Atleta implements UserDetails {
     private RuoloInCampo ruoloInCampoSecondario;
     private RuoloInCampo ruoloInCampoAlternativo;
 
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "valutazione_admin_id")
     private Valutazione valutazioneAdmin;

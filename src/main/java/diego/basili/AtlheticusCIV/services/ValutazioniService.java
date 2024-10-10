@@ -8,6 +8,7 @@ import diego.basili.AtlheticusCIV.exceptions.NotFoundException;
 import diego.basili.AtlheticusCIV.payloads.ValutazioneDTO;
 import diego.basili.AtlheticusCIV.repositories.ValutazioniRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ public class ValutazioniService {
     @Autowired
     private ValutazioniRepository valutazioniRepository;
     @Autowired
+    @Lazy
     private AtletiService atletiService;
 
     public Valutazione findById(UUID valutazioneId) {
