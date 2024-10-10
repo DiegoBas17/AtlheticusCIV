@@ -1,10 +1,13 @@
 package diego.basili.AtlheticusCIV.controllers;
 
 import diego.basili.AtlheticusCIV.entities.Partita;
+import diego.basili.AtlheticusCIV.entities.PrenotazionePartita;
 import diego.basili.AtlheticusCIV.entities.Statistica;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.payloads.NewEntityRespDTO;
 import diego.basili.AtlheticusCIV.payloads.PartitaDTO;
+import diego.basili.AtlheticusCIV.payloads.PrenotazionePartitaDTO;
+import diego.basili.AtlheticusCIV.payloads.StatisticaDTO;
 import diego.basili.AtlheticusCIV.services.StatisticheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -36,7 +39,7 @@ public class StatisticheController {
 
     @PostMapping("{partitaId}")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public List<Statistica> save(@PathVariable UUID partitaId){
             return this.statisticheService.saveStatistiche(partitaId);
     }
@@ -49,8 +52,21 @@ public class StatisticheController {
 
     @DeleteMapping("/{statisticaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public void findByIdAndDelete(@PathVariable UUID statisticaId){
         this.statisticheService.delete(statisticaId);
+    }
+
+    @PutMapping("/{statisticaId}")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
+    public Statistica findByIdAndUpdate(@PathVariable UUID statisticaId, @RequestBody @Validated StatisticaDTO body, BindingResult validationResult) {
+        if (validationResult.hasErrors()) {
+            String messages = validationResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.joining(". "));
+            throw new BadRequestException("Ci sono stati errori nel payload. " + messages);
+        } else {
+            return this.statisticheService.findByUpdate(statisticaId, body);
+        }
     }
 }

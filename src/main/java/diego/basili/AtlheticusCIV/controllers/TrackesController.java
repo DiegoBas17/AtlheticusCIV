@@ -55,7 +55,7 @@ public class TrackesController {
     }
 
     @PutMapping("/{trackerId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public Tracker findByIdAndUpdate(@PathVariable UUID trackerId, @RequestBody @Validated TrackerDTO body, BindingResult validationResult){
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()
@@ -69,7 +69,7 @@ public class TrackesController {
 
     @DeleteMapping("/{trackerId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public void findByIdAndDelete(@PathVariable UUID trackerId){
         this.trakersService.findByIdAndDelete(trackerId);
     }

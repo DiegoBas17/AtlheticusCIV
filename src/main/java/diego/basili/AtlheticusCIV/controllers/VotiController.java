@@ -41,7 +41,7 @@ public class VotiController {
 
     @PostMapping("/{statisticaId}")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public NewEntityRespDTO save(@AuthenticationPrincipal Atleta atleta, @PathVariable UUID statisticaId, @RequestBody @Validated VotoDTO body, BindingResult validationResult){
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()
@@ -60,7 +60,7 @@ public class VotiController {
     }
 
     @PutMapping("/{votoId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public Voto findByIdAndUpdate(@PathVariable UUID votoId, @RequestBody @Validated VotoDTO body, BindingResult validationResult){
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()
@@ -74,7 +74,7 @@ public class VotiController {
 
     @DeleteMapping("/{votoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public void findByIdAndDelete(@PathVariable UUID votoId){
         this.votiService.findByIdAndDelete(votoId);
     }

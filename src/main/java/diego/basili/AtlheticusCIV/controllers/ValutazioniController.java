@@ -42,14 +42,14 @@ public class ValutazioniController {
 
     @DeleteMapping("/{valutazioneId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public void findByIdAndDelete(@PathVariable UUID valutazioneId){
         this.valutazioniService.findByIdAndDelete(valutazioneId);
     }
 
     @PostMapping("{atletaId}")
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public NewEntityRespDTO save(@PathVariable UUID atletaId, @RequestBody @Validated ValutazioneDTO body, BindingResult validationResult){
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()
@@ -62,7 +62,7 @@ public class ValutazioniController {
     }
 
     @PutMapping("/{valutazioneId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public Valutazione findByIdAndUpdate(@PathVariable UUID valutazioneId, @RequestBody @Validated ValutazioneDTO body, BindingResult validationResult){
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()

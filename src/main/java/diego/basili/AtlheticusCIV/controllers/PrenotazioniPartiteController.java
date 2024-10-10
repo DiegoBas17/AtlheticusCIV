@@ -36,25 +36,25 @@ public class PrenotazioniPartiteController {
     }
 
     @GetMapping("/{prenotazioneId}")
-    @PreAuthorize("hasAnyAuthority('ADMIN', 'USER')")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public PrenotazionePartita findById(@PathVariable UUID prenotazioneId) {
         return this.prenotazioniPartiteService.findById(prenotazioneId);
     }
 
     @PostMapping("/{partitaId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public NewEntityRespDTO save(@AuthenticationPrincipal Atleta atleta, @PathVariable UUID partitaId) {
             return new NewEntityRespDTO(this.prenotazioniPartiteService.savePrenotazione(atleta, partitaId).getId());
         }
 
     @DeleteMapping("/{prenotazioneId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public void findByIdAndDelete(@PathVariable UUID prenotazioneId) {
         prenotazioniPartiteService.delete(prenotazioneId);
     }
 
     @PutMapping("/{prenotazioneId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public PrenotazionePartita findByIdAndUpdate(@PathVariable UUID prenotazioneId, @RequestBody @Validated PrenotazionePartitaDTO body, BindingResult validationResult) {
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()

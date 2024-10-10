@@ -35,7 +35,7 @@ public class PartiteController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public NewEntityRespDTO save(@RequestBody @Validated PartitaDTO body, BindingResult validationResult){
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()
@@ -54,7 +54,7 @@ public class PartiteController {
     }
 
     @PutMapping("/{partitaId}")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public Partita findByIdAndUpdate(@PathVariable UUID partitaId, @RequestBody @Validated PartitaDTO body, BindingResult validationResult){
         if (validationResult.hasErrors()) {
             String messages = validationResult.getAllErrors().stream()
@@ -68,7 +68,7 @@ public class PartiteController {
 
     @DeleteMapping("/{partitaId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public void findByIdAndDelete(@PathVariable UUID partitaId){
         this.partiteService.delete(partitaId);
     }
