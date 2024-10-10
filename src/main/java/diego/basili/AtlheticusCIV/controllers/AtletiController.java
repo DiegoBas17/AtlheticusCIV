@@ -5,6 +5,7 @@ import diego.basili.AtlheticusCIV.enums.Ruolo;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.exceptions.UnauthorizedException;
 import diego.basili.AtlheticusCIV.payloads.AtletaDTO;
+import diego.basili.AtlheticusCIV.payloads.RuoliInCampoDTO;
 import diego.basili.AtlheticusCIV.services.AtletiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
@@ -44,7 +45,7 @@ public class AtletiController {
 
     @PutMapping("/me")
     @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
-    public Atleta updateProfile(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @RequestBody AtletaDTO body) {
+    public Atleta updateProfile(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @RequestBody @Validated AtletaDTO body) {
         return this.atletiService.findByIdAndUpdate(currentAuthenticatedAtleta.getId(), body);
     }
 
@@ -52,6 +53,12 @@ public class AtletiController {
     @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
     public Atleta uploadMeAvatar(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @RequestParam("avatar") MultipartFile image) throws IOException {
         return this.atletiService.uploadImage(currentAuthenticatedAtleta.getId(), image);
+    }
+
+    @PutMapping("/me/ruoli")
+    @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
+    public Atleta updateRuoli(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @RequestBody @Validated RuoliInCampoDTO ruoliDTO) {
+        return  atletiService.updateRuoliInCampo(currentAuthenticatedAtleta.getId(), ruoliDTO);
     }
 
     @GetMapping
@@ -78,15 +85,7 @@ public class AtletiController {
             throw new BadRequestException("Ci sono stati errori nel payload. " + messages);
         }
         Atleta targetAtleta = findById(atletaId);
-        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.ADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
-            throw new BadRequestException("Gli amministratori non possono modificare altri amministratori.");
-        }
-        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.SUPERADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
-            throw new BadRequestException("Gli superamministratori non possono modificare altri superamministratori.");
-        }
-        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN) {
-            throw new BadRequestException("Gli amministratori non possono modificare altri i superamministratori.");
-        }
+        checkAuthorization(currentAuthenticatedAtleta, targetAtleta);
         return this.atletiService.findByIdAndUpdate(atletaId, body);
     }
 
@@ -95,15 +94,7 @@ public class AtletiController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public void findByIdAndDelete(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @PathVariable UUID atletaId) {
         Atleta targetAtleta = findById(atletaId);
-        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.ADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
-            throw new UnauthorizedException("Gli amministratori non possono modificare altri amministratori.");
-        }
-        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.SUPERADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
-            throw new UnauthorizedException("Gli superamministratori non possono modificare altri superamministratori.");
-        }
-        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN) {
-            throw new UnauthorizedException("Gli amministratori non possono modificare altri i superamministratori.");
-        }
+        checkAuthorization(currentAuthenticatedAtleta, targetAtleta);
         this.atletiService.findByIdAndDelete(atletaId);
     }
 
@@ -111,15 +102,29 @@ public class AtletiController {
     @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
     public Atleta uploadAvatar(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @PathVariable UUID atletaId, @RequestParam("avatar") MultipartFile image) throws IOException {
         Atleta targetAtleta = findById(atletaId);
-        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.ADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
+        checkAuthorization(currentAuthenticatedAtleta, targetAtleta);
+        return this.atletiService.uploadImage(atletaId, image);
+    }
+
+    @PutMapping("/{atletaId}/ruoli")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
+    public Atleta updateRuoli(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @PathVariable UUID atletaId, @RequestBody @Validated RuoliInCampoDTO ruoliDTO) {
+        Atleta targetAtleta = findById(atletaId);
+        checkAuthorization(currentAuthenticatedAtleta, targetAtleta);
+        return  atletiService.updateRuoliInCampo(atletaId, ruoliDTO);
+    }
+
+    private void checkAuthorization(Atleta currentAuthenticatedAtleta, Atleta targetAtleta) {
+        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.ADMIN
+                && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
             throw new UnauthorizedException("Gli amministratori non possono modificare altri amministratori.");
         }
-        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.SUPERADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
+        if (currentAuthenticatedAtleta.getRuolo() == Ruolo.SUPERADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN
+                && !currentAuthenticatedAtleta.getId().equals(targetAtleta.getId())) {
             throw new UnauthorizedException("Gli superamministratori non possono modificare altri superamministratori.");
         }
         if (currentAuthenticatedAtleta.getRuolo() == Ruolo.ADMIN && targetAtleta.getRuolo() == Ruolo.SUPERADMIN) {
-            throw new UnauthorizedException("Gli amministratori non possono modificare altri i superamministratori.");
+            throw new UnauthorizedException("Gli amministratori non possono modificare i superamministratori.");
         }
-        return this.atletiService.uploadImage(atletaId, image);
     }
 }
