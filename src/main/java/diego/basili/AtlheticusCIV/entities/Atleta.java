@@ -2,6 +2,7 @@ package diego.basili.AtlheticusCIV.entities;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import diego.basili.AtlheticusCIV.enums.Ruolo;
+import diego.basili.AtlheticusCIV.enums.RuoloInCampo;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,7 +17,7 @@ import java.util.UUID;
 @Entity
 @Getter
 @Setter
-@ToString
+@ToString(exclude = {"prenotazioniPartite", "voti", "statistiche"})
 @NoArgsConstructor
 @Table(name = "atleti")
 public class Atleta implements UserDetails {
@@ -34,16 +35,23 @@ public class Atleta implements UserDetails {
     private String avatar;
     private Double mediaGol;
     private Double mediaAssist;
-    private Long partiteGiocate;
     private Double mediaVoti;
+    private Long partiteGiocate;
     private Long totaleGol;
     private Long totaleAssist;
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
+    private RuoloInCampo ruoloInCampoPrimario;
+    private RuoloInCampo ruoloInCampoSecondario;
+    private RuoloInCampo ruoloInCampoAlternativo;
 
     @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "valutazione_id")
-    private Valutazione valutazione;
+    @JoinColumn(name = "valutazione_admin_id")
+    private Valutazione valutazioneAdmin;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "valutazione_civ_id")
+    private Valutazione valutazioneCIV;
 
     @JsonIgnore
     @OneToMany(mappedBy = "atleta", cascade = CascadeType.ALL)
@@ -72,6 +80,11 @@ public class Atleta implements UserDetails {
         this.mediaVoti = 0.0;
         this.totaleGol = 0L;
         this.totaleAssist = 0L;
+        this.ruoloInCampoPrimario = null;
+        this.ruoloInCampoSecondario = null;
+        this.ruoloInCampoAlternativo = null;
+        this.valutazioneAdmin = null;
+        this.valutazioneCIV = null;
         this.prenotazioniPartite = new ArrayList<>();
         this.voti = new ArrayList<>();
         this.statistiche = new ArrayList<>();
