@@ -23,8 +23,8 @@ public class ValutazioniService {
     @Autowired
     private AtletiService atletiService;
 
-    public Valutazione findById(UUID trackId) {
-        return this.valutazioniRepository.findById(trackId).orElseThrow(() -> new NotFoundException(trackId));
+    public Valutazione findById(UUID valutazioneId) {
+        return this.valutazioniRepository.findById(valutazioneId).orElseThrow(() -> new NotFoundException(valutazioneId));
     }
 
     public Page<Valutazione> findAll(int page, int size, String sortBy) {
@@ -40,47 +40,16 @@ public class ValutazioniService {
 
     public Valutazione saveValutazione(ValutazioneDTO body, UUID atletaId) {
         Atleta atleta = atletiService.findById(atletaId);
-        Double difesa;
-        Double velocità;
-        Double resistenza;
-        Double tiro;
-        Double tecnica;
-        try {
-            difesa = Double.parseDouble(body.difesa());
-            velocità = Double.parseDouble(body.velocità());
-            resistenza = Double.parseDouble(body.resistenza());
-            tiro = Double.parseDouble(body.tiro());
-            tecnica = Double.parseDouble(body.tecnica());
-        }
-        catch (NumberFormatException e) {
-            throw new BadRequestException("Ci sono errori nel body!");
-        }
-        Valutazione valutazione = new Valutazione(difesa, velocità, resistenza, tiro, tecnica, atleta);
-        return valutazione;
+        return new Valutazione(body.difesa(), body.velocita(), body.resistenza(), body.tiro(), body.tecnica(), atleta);
     }
 
     public Valutazione findByIdAndUpdate(ValutazioneDTO body, UUID valutazioneId) {
         Valutazione valutazione = findById(valutazioneId);
-        Double difesa;
-        Double velocità;
-        Double resistenza;
-        Double tiro;
-        Double tecnica;
-        try {
-            difesa = Double.parseDouble(body.difesa());
-            velocità = Double.parseDouble(body.velocità());
-            resistenza = Double.parseDouble(body.resistenza());
-            tiro = Double.parseDouble(body.tiro());
-            tecnica = Double.parseDouble(body.tecnica());
-        }
-        catch (NumberFormatException e) {
-            throw new BadRequestException("Ci sono errori nel body!");
-        }
-        valutazione.setDifesa(difesa);
-        valutazione.setVelocità(velocità);
-        valutazione.setResistenza(resistenza);
-        valutazione.setTecnica(tecnica);
-        valutazione.setTiro(tiro);
+        valutazione.setDifesa(body.difesa());
+        valutazione.setVelocità(body.velocita());
+        valutazione.setResistenza(body.resistenza());
+        valutazione.setTecnica(body.tecnica());
+        valutazione.setTiro(body.tiro());
         return valutazioniRepository.save(valutazione);
     }
 }

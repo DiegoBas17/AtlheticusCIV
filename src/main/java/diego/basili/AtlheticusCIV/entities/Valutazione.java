@@ -17,17 +17,17 @@ public class Valutazione {
     @Id
     @GeneratedValue
     private UUID id;
-    private Double difesa;
-    private Double velocità;
-    private Double resistenza;
-    private Double tiro;
-    private Double tecnica;
+    private int difesa;
+    private int velocità;
+    private int resistenza;
+    private int tiro;
+    private int tecnica;
 
     @JsonIgnore
     @OneToOne(mappedBy = "valutazione")
     private Atleta atleta;
 
-    public Valutazione(Double difesa, Double velocità, Double resistenza, Double tiro, Double tecnica, Atleta atleta) {
+    public Valutazione(int difesa, int velocità, int resistenza, int tiro, int tecnica, Atleta atleta) {
         this.difesa = difesa;
         this.velocità = velocità;
         this.resistenza = resistenza;
