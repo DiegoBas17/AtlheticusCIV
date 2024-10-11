@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 public record PartitaDTO(LocalDateTime data,
                          @NotEmpty(message = "Il luogo è obbligatoria")
-                         @Size(min = 3, max = 200)
+                         @Size(min = 3)
                          String luogo,
                          @NotEmpty(message = "Il tipoPartita è obbligatoria")
                          @Size(min = 3, max = 10)

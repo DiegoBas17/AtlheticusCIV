@@ -18,6 +18,7 @@ public class PrenotazionePartita {
     @Id
     @GeneratedValue
     private UUID id;
+    @Enumerated(EnumType.STRING)
     private StatoPrenotazione statoPrenotazione;
 
     @ManyToOne
