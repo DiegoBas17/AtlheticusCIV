@@ -54,9 +54,6 @@ public class PartiteService {
     public Partita findByIdAndUpdate(UUID partitaId, PartitaDTO updateBody) {
         Partita found = findById(partitaId);
         TipoPartita tipoPartita;
-        if (this.partiteRepository.existsByData(updateBody.data()) && !found.getData().equals(updateBody.data())) {
-            throw new BadRequestException("L'email " + updateBody.data() + " è già in uso!");
-        } else {
             try {
                 tipoPartita = TipoPartita.valueOf(updateBody.tipoPartita().toUpperCase());
             } catch (IllegalArgumentException e) {
@@ -66,7 +63,7 @@ public class PartiteService {
             found.setLuogo(updateBody.luogo());
             found.setTipoPartita(tipoPartita);
             return partiteRepository.save(found);
-        }
+
     }
 
     public Partita addStatistica(Partita updateBody) {
