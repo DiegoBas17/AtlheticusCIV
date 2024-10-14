@@ -69,14 +69,14 @@ public class StatisticheService {
         Statistica statistica = findById(statisticaId);
         ColoreSquadra coloreSquadra;
         try {
-            coloreSquadra = ColoreSquadra.valueOf(body.coloreSquadra());
+            coloreSquadra = ColoreSquadra.valueOf(body.coloreSquadra().toUpperCase());
         }
         catch (IllegalArgumentException e) {
             throw new BadRequestException("Colore squadra non valido!");
         }
         TipoPartita tipoPartita;
         try {
-            tipoPartita = TipoPartita.valueOf(body.tipoPartita());
+            tipoPartita = TipoPartita.valueOf(body.tipoPartita().toUpperCase());
         }
         catch (IllegalArgumentException e) {
             throw new BadRequestException("Tipo partita non valido!");
@@ -90,5 +90,9 @@ public class StatisticheService {
 
     public List<Statistica> findByAtletaId(UUID atletaId) {
         return this.statisticheRepository.findByAtletaId(atletaId);
+    }
+
+    public void addTracker (Statistica statistica) {
+        statisticheRepository.save(statistica);
     }
 }

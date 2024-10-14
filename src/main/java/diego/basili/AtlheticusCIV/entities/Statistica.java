@@ -1,5 +1,6 @@
 package diego.basili.AtlheticusCIV.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import diego.basili.AtlheticusCIV.enums.ColoreSquadra;
 import diego.basili.AtlheticusCIV.enums.TipoPartita;
 import jakarta.persistence.*;
@@ -25,6 +26,7 @@ public class Statistica {
     private Long gol;
     private Long assist;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "partita_id")
     private Partita partita;
