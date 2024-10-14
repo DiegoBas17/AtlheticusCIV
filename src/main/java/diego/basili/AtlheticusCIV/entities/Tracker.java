@@ -1,5 +1,6 @@
 package diego.basili.AtlheticusCIV.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import diego.basili.AtlheticusCIV.enums.TipoPartita;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +33,7 @@ public class Tracker {
     private Double valutazione5Stelle;
     private String analisiAllenatore;
 
+    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "statistica_id")
     private Statistica statistica;

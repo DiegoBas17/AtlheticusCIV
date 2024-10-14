@@ -43,7 +43,7 @@ public class TrakersService {
         Statistica statistica = statisticheService.findById(statisticaId);
         TipoPartita tipoPartita;
         try {
-            tipoPartita = TipoPartita.valueOf(body.tipoPartita());
+            tipoPartita = TipoPartita.valueOf(body.tipoPartita().toUpperCase());
         }
         catch (IllegalArgumentException e){
             throw new BadRequestException("tipo partita non valido!");
@@ -81,6 +81,9 @@ public class TrakersService {
         Tracker tracker = new Tracker(tipoPartita, attività, distanza, passaggi, body.corsa(), numeroSprint,
                 sprintMedio, sprintMassimo, body.possesso(),tiri, tiroMassimo, tiroMedio, valutazione5Stelle,
                 body.analisiAllenatore(), statistica);
+        trackersRepository.save(tracker);
+        statistica.setTracker(tracker);
+        statisticheService.addTracker(statistica);
         return tracker;
     }
 
