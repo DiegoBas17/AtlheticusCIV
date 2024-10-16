@@ -95,4 +95,8 @@ public class StatisticheService {
     public void addTracker (Statistica statistica) {
         statisticheRepository.save(statistica);
     }
+
+    public void addVoto (Statistica statistica) {
+        statisticheRepository.save(statistica);
+    }
 }
