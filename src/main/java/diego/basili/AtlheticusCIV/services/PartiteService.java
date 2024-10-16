@@ -21,7 +21,10 @@ public class PartiteService {
 
     public Page<Partita> findAll(int page, int size, String sortBy) {
         if (page > 20) page = 20;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Sort sort = sortBy.equals("data")
+                ? Sort.by(Sort.Direction.DESC, "data")
+                : Sort.by(sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
         return this.partiteRepository.findAll(pageable);
     }
 
