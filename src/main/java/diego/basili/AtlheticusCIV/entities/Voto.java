@@ -1,5 +1,6 @@
 package diego.basili.AtlheticusCIV.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class Voto {
     @JoinColumn(name = "atleta_id")
     private Atleta atleta;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "statistica_id")
     private Statistica statistica;
