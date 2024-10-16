@@ -23,6 +23,8 @@ public class VotiService {
     private VotiRepository votiRepository;
     @Autowired
     private StatisticheService statisticheService;
+    @Autowired
+    private AtletiService atletiService;
 
     public Voto findById(UUID trackId) {
         return this.votiRepository.findById(trackId).orElseThrow(() -> new NotFoundException(trackId));
@@ -55,6 +57,9 @@ public class VotiService {
         votiRepository.save(voto1);
         statistica.getVoti().add(voto1);
         statisticheService.addVoto(statistica);
+        Atleta atleta1 = atletiService.findById(statistica.getAtleta().getId());
+        atleta1.aggiornaMediaVoti(statistica);
+        atletiService.addStatistica(atleta1, statistica);
         return voto1;
     }
 
