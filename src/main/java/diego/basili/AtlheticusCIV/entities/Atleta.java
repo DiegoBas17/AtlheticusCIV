@@ -1,5 +1,4 @@
 package diego.basili.AtlheticusCIV.entities;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import diego.basili.AtlheticusCIV.enums.Ruolo;
 import diego.basili.AtlheticusCIV.enums.RuoloInCampo;
@@ -8,7 +7,6 @@ import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -100,4 +98,27 @@ public class Atleta implements UserDetails {
     public String getUsername() {
         return this.email;
     }
+
+    public void aggiornaMediaGol() {
+        this.mediaGol = (partiteGiocate > 0) ? (double) totaleGol / partiteGiocate : 0.0;
+    }
+
+    public void aggiornaMediaAssist() {
+        this.mediaAssist = (partiteGiocate > 0) ? (double) totaleAssist / partiteGiocate : 0.0;
+    }
+
+    public void aggiornaMediaVoti(Statistica statistica) {
+        if (statistica.getVoti().isEmpty()) {
+            this.mediaVoti = 0.0; // Se non ci sono voti per quella statistica, la media rimane 0
+        } else {
+            // Calcola la media dei voti solo per la statistica passata
+            this.mediaVoti = statistica.getVoti()
+                    .stream()
+                    .mapToDouble(Voto::getVoto)  // Assumendo che 'getVoto()' restituisca il valore del voto
+                    .average()
+                    .orElse(0.0);
+        }
+    }
+
+
 }
