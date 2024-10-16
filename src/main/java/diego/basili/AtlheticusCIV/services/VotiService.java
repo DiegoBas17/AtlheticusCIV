@@ -41,6 +41,9 @@ public class VotiService {
 
     public Voto saveVoto(Atleta atleta, VotoDTO body, UUID statisticaId) {
         Statistica statistica = statisticheService.findById(statisticaId);
+        if (votiRepository.existsByAtletaAndStatistica(atleta, statistica)) {
+            throw new BadRequestException("L'atleta ha già votato per questa statistica!");
+        }
         Long voto;
         try {
             voto = (long) body.voto();
@@ -49,7 +52,10 @@ public class VotiService {
             throw new BadRequestException("voto non valido!");
         }
         Voto voto1 = new Voto(voto, statistica, atleta);
-        return votiRepository.save(voto1);
+        votiRepository.save(voto1);
+        statistica.getVoti().add(voto1);
+        statisticheService.addVoto(statistica);
+        return voto1;
     }
 
     public Voto findByIdAndUpdate(UUID votoId, VotoDTO body) {
