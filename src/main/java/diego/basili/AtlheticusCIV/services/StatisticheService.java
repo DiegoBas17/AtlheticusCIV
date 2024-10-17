@@ -43,16 +43,24 @@ public class StatisticheService {
             throw new BadRequestException("Nessun atleta trovato per la partita.");
         }
         List<Statistica> statistiche = new ArrayList<>();
+        List<Statistica> statisticheDaSalvare = new ArrayList<>();
         prenotazioni.forEach(prenotazione -> {
             Atleta atleta = prenotazione.getAtleta();
             Statistica statistica = new Statistica(TipoPartita.CALCETTO, ColoreSquadra.ROSSO, 0L, 0L, partita, atleta);
+
+            statisticheDaSalvare.add(statistica);
+            statistica.setAtleta(atleta);
+            atleta.getStatistiche().add(statistica);
+        });
+        statisticheDaSalvare.forEach(statistica -> {
             statisticheRepository.save(statistica);
             statistiche.add(statistica);
-            atleta.getStatistiche().add(statistica);
-            atletiService.addStatistica(atleta, statistica);
-            partita.getStatistiche().add(statistica);
-            partiteService.addStatistica(partita);
+
+            Partita partitaAggiornata = statistica.getPartita();
+            partitaAggiornata.getStatistiche().add(statistica);
+            partiteService.addStatistica(partitaAggiornata);
         });
+
         return statistiche;
     }
 
