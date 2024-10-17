@@ -131,9 +131,9 @@ public class AtletiService {
         RuoloInCampo ruoloInCampoSecondario;
         RuoloInCampo ruoloInCampoAlternativo;
         try {
-            ruoloInCampoPrimario = RuoloInCampo.valueOf(body.ruoloInCampoPrimario());
-            ruoloInCampoSecondario = RuoloInCampo.valueOf(body.ruoloInCampoSecondario());
-            ruoloInCampoAlternativo = RuoloInCampo.valueOf(body.ruoloInCampoAlternativo());
+            ruoloInCampoPrimario = RuoloInCampo.valueOf(body.ruoloInCampoPrimario().toUpperCase());
+            ruoloInCampoSecondario = RuoloInCampo.valueOf(body.ruoloInCampoSecondario().toUpperCase());
+            ruoloInCampoAlternativo = RuoloInCampo.valueOf(body.ruoloInCampoAlternativo().toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new BadRequestException("Errori nei Ruoli inseriti!");
         }
