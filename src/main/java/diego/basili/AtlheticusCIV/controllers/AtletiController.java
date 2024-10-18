@@ -4,6 +4,7 @@ import diego.basili.AtlheticusCIV.entities.Atleta;
 import diego.basili.AtlheticusCIV.enums.Ruolo;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.exceptions.UnauthorizedException;
+import diego.basili.AtlheticusCIV.payloads.AtletaAuthorizationDTO;
 import diego.basili.AtlheticusCIV.payloads.AtletaDTO;
 import diego.basili.AtlheticusCIV.payloads.RuoliInCampoDTO;
 import diego.basili.AtlheticusCIV.services.AtletiService;
@@ -112,6 +113,14 @@ public class AtletiController {
         Atleta targetAtleta = findById(atletaId);
         checkAuthorization(currentAuthenticatedAtleta, targetAtleta);
         return  atletiService.updateRuoliInCampo(atletaId, ruoliDTO);
+    }
+
+    @PatchMapping("/{atletaId}/authorization")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
+    public Atleta updateAuthorization(@AuthenticationPrincipal Atleta currentAuthenticatedAtleta, @PathVariable UUID atletaId, @RequestBody @Validated AtletaAuthorizationDTO body) {
+        Atleta targetAtleta = findById(atletaId);
+        checkAuthorization(currentAuthenticatedAtleta, targetAtleta);
+        return atletiService.updateAuthorization(atletaId, body);
     }
 
     private void checkAuthorization(Atleta currentAuthenticatedAtleta, Atleta targetAtleta) {

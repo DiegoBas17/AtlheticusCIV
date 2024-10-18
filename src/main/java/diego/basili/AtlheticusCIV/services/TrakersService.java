@@ -140,7 +140,6 @@ public class TrakersService {
         tracker.setTiroMedio(tiroMedio);
         tracker.setValutazione5Stelle(valutazione5Stelle);
         tracker.setAnalisiAllenatore(body.analisiAllenatore());
-        /*forse dovrei aggiungere la possibilita di cambiare la statistica nella modifica del tracker*/
         return trackersRepository.save(tracker);
     }
 }

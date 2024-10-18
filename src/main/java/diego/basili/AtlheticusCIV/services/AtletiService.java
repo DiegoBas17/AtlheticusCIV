@@ -9,6 +9,7 @@ import diego.basili.AtlheticusCIV.enums.Ruolo;
 import diego.basili.AtlheticusCIV.enums.RuoloInCampo;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.exceptions.NotFoundException;
+import diego.basili.AtlheticusCIV.payloads.AtletaAuthorizationDTO;
 import diego.basili.AtlheticusCIV.payloads.AtletaDTO;
 import diego.basili.AtlheticusCIV.payloads.RuoliInCampoDTO;
 import diego.basili.AtlheticusCIV.payloads.ValutazioneDTO;
@@ -95,7 +96,7 @@ public class AtletiService {
             found.setCognome(updateBody.cognome());
             found.setEmail(updateBody.email());
             found.setNumeroTelefono(updateBody.numeroDiCellulare());
-            found.setPassword(updateBody.password());
+            found.setPassword(bcrypt.encode(updateBody.password()));
             return atletiRepository.save(found);
         }
     }
@@ -142,4 +143,19 @@ public class AtletiService {
         atleta.setRuoloInCampoAlternativo(ruoloInCampoAlternativo);
         return atletiRepository.save(atleta);
     }
+
+    public Atleta updateAuthorization(UUID atletaId, AtletaAuthorizationDTO body) {
+        Atleta found = findById(atletaId);
+        Ruolo ruolo;
+        try {
+            ruolo = Ruolo.valueOf(body.ruolo().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Ruolo inserito non valido");
+        }
+        found.setRuolo(ruolo);
+        return atletiRepository.save(found);
+    }
+
+
+
 }
