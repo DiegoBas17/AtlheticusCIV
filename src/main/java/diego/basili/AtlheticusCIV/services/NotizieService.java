@@ -2,10 +2,12 @@ package diego.basili.AtlheticusCIV.services;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import diego.basili.AtlheticusCIV.entities.Atleta;
 import diego.basili.AtlheticusCIV.entities.Notizia;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.exceptions.NotFoundException;
 import diego.basili.AtlheticusCIV.payloads.NotiziaDTO;
+import diego.basili.AtlheticusCIV.payloads.NotiziaUpdateTextDTO;
 import diego.basili.AtlheticusCIV.repositories.NotizieRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -31,7 +34,10 @@ public class NotizieService {
     }
 
     public Page<Notizia> findAll(int page, int size, String sortBy) {
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
+        Sort sort = sortBy.equals("dataCreazione")
+                ? Sort.by(Sort.Direction.DESC, "dataCreazione")
+                : Sort.by(sortBy);
+        Pageable pageable = PageRequest.of(page, size, sort);
         return notizieRepository.findAll(pageable);
     }
 
@@ -48,16 +54,8 @@ public class NotizieService {
         return notizieRepository.save(notizia);
     }
 
-    public Notizia updateNotizia(UUID notiziaId, NotiziaDTO body) {
+    public Notizia updateNotizia(UUID notiziaId, NotiziaUpdateTextDTO body) {
         Notizia notizia = findById(notiziaId);
-        if (body.immagine() != null && !body.immagine().isEmpty()) {
-            try {
-                String url = (String) cloudinary.uploader().upload(body.immagine().getBytes(), ObjectUtils.emptyMap()).get("url");
-                notizia.setImmagine(url);
-            } catch (IOException e) {
-                throw new BadRequestException("Errore nel caricamento del file, verifica il formato o le dimensioni!");
-            }
-        }
         notizia.setTitolo(body.titolo());
         notizia.setTesto(body.testo());
         notizia.setAutore(body.autore());
@@ -68,4 +66,16 @@ public class NotizieService {
         Notizia found = findById(notiziaId);
         notizieRepository.delete(found);
     }
+
+    public Notizia uploadImage(UUID notiziaId, MultipartFile file) {
+        try {
+            Notizia notizia = findById(notiziaId);
+            String url = (String) cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap()).get("url");
+            notizia.setImmagine(url);
+            return notizieRepository.save(notizia);
+        } catch (IOException e ) {
+            throw new BadRequestException("Errore nel caricamento del file, verifica il formato o le dimensioni!");
+        }
+    }
+
 }
