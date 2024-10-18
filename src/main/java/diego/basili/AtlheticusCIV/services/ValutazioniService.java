@@ -42,13 +42,13 @@ public class ValutazioniService {
 
     public Valutazione saveValutazione(ValutazioneDTO body, UUID atletaId) {
         Atleta atleta = atletiService.findById(atletaId);
-        return new Valutazione(body.difesa(), body.velocita(), body.resistenza(), body.tiro(), body.tecnica(), atleta);
+        return new Valutazione(body.difesa(), body.velocità(), body.resistenza(), body.tiro(), body.tecnica(), atleta);
     }
 
     public Valutazione findByIdAndUpdate(ValutazioneDTO body, UUID valutazioneId) {
         Valutazione valutazione = findById(valutazioneId);
         valutazione.setDifesa(body.difesa());
-        valutazione.setVelocità(body.velocita());
+        valutazione.setVelocità(body.velocità());
         valutazione.setResistenza(body.resistenza());
         valutazione.setTecnica(body.tecnica());
         valutazione.setTiro(body.tiro());
