@@ -8,7 +8,7 @@ public record NotiziaUpdateTextDTO(@NotEmpty(message = "Il titolo è obbligatori
                                    @Size(min = 3, max = 200)
                                    String titolo,
                                    @NotEmpty(message = "Il testo è obbligatoria")
-                                   @Size(min = 3, max = 200)
+                                   @Size(min = 3)
                                    String testo,
                                    @NotEmpty(message = "Il autore è obbligatoria")
                                    @Size(min = 3, max = 200)

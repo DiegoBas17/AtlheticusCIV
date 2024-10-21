@@ -8,7 +8,7 @@ public record NotiziaDTO(@NotEmpty(message = "Il titolo è obbligatoria")
                          @Size(min = 3, max = 200)
                          String titolo,
                          @NotEmpty(message = "Il testo è obbligatoria")
-                         @Size(min = 3, max = 200)
+                         @Size(min = 3)
                          String testo,
                          MultipartFile immagine,
                          @NotEmpty(message = "Il autore è obbligatoria")

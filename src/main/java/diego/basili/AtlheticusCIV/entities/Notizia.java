@@ -1,9 +1,6 @@
 package diego.basili.AtlheticusCIV.entities;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -22,6 +19,7 @@ public class Notizia {
     private UUID id;
     private String immagine;
     private String titolo;
+    @Column(length = 10000)
     private String testo;
     private LocalDateTime dataCreazione;
     private String autore;
