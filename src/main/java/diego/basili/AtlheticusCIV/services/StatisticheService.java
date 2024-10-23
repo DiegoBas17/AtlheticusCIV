@@ -45,9 +45,8 @@ public class StatisticheService {
         List<Statistica> statistiche = new ArrayList<>();
         List<Statistica> statisticheDaSalvare = new ArrayList<>();
         prenotazioni.forEach(prenotazione -> {
-            Atleta atleta = prenotazione.getAtleta();
+            Atleta atleta = atletiService.findById(prenotazione.getAtleta().getId());
             Statistica statistica = new Statistica(TipoPartita.CALCETTO, ColoreSquadra.ROSSO, 0L, 0L, partita, atleta);
-
             statisticheDaSalvare.add(statistica);
             statistica.setAtleta(atleta);
             atleta.getStatistiche().add(statistica);
@@ -55,10 +54,12 @@ public class StatisticheService {
         statisticheDaSalvare.forEach(statistica -> {
             statisticheRepository.save(statistica);
             statistiche.add(statistica);
-
             Partita partitaAggiornata = statistica.getPartita();
             partitaAggiornata.getStatistiche().add(statistica);
             partiteService.addStatistica(partitaAggiornata);
+            Atleta atleta = atletiService.findById(statistica.getAtleta().getId());
+            atleta.setPartiteGiocate(atleta.getPartiteGiocate() + 1);
+            atletiService.addStatistica(atleta, statistica);
         });
 
         return statistiche;
@@ -93,6 +94,8 @@ public class StatisticheService {
         statistica.setGol(body.gol());
         statistica.setColoreSquadra(coloreSquadra);
         statistica.setTipoPartita(tipoPartita);
+        Atleta atleta = atletiService.findById(statistica.getAtleta().getId());
+        atletiService.addStatistica(atleta, statistica);
         return statisticheRepository.save(statistica);
     }
 

@@ -119,7 +119,6 @@ public class AtletiService {
         }
         atleta.setTotaleGol(atleta.getTotaleGol() + statistica.getGol());
         atleta.setTotaleAssist(atleta.getTotaleAssist() + statistica.getAssist());
-        atleta.setPartiteGiocate(atleta.getPartiteGiocate() + 1);
         atleta.aggiornaMediaGol();
         atleta.aggiornaMediaAssist();
         atleta.getStatistiche().add(statistica);
