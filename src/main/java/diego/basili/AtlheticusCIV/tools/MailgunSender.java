@@ -10,24 +10,26 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MailgunSender {
-    @Value("${mailgun.email}")
     private String fromEmail;
     private String apiKey;
     private String domainName;
 
-    public MailgunSender(@Value("${mailgun.key}") String apiKey, @Value("${mailgun.domain}") String domainName) {
+    public MailgunSender(@Value("${mailgun.key}") String apiKey,
+                         @Value("${mailgun.domain}") String domainName,
+                         @Value("${mailgun.email}") String fromEmail) {
         this.apiKey = apiKey;
         this.domainName = domainName;
+        this.fromEmail = fromEmail;
     }
 
-    public void sendRegistrationEmail(Atleta recipient) {
+    public void sendRegistrationEmail(Atleta atleta, String subject, String body) {
         HttpResponse<JsonNode> response = Unirest.post("https://api.mailgun.net/v3/" + this.domainName + "/messages")
                 .basicAuth("api", this.apiKey)
-                .queryString("from", fromEmail) // TODO: Mettere il mittente in env.properties
-                .queryString("to", recipient.getEmail()) // N.B. Ricordarsi di verificare tramite dashboard Mailgun l'indirizzo del ricevente
-                .queryString("subject", "Registrazione completata")
-                .queryString("text", "Ciao " + recipient.getCognome() + ", grazie per esserti registrato!")
+                .queryString("from", fromEmail)
+                .queryString("to", fromEmail)
+                .queryString("subject", subject)
+                .queryString("text", "Ciao " + atleta.getCognome() + body)
                 .asJson();
-        System.out.println(response.getBody()); // <- Stampo il messaggio in risposta per rilevare eventuali errori
+        System.out.println(response.getBody());
     }
 }

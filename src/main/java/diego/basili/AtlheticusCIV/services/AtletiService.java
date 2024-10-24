@@ -60,7 +60,7 @@ public class AtletiService {
             atleta.setValutazioneAdmin(valutazioneAdmin);
             atleta.setValutazioneCIV(valutazioneCiv);
             atletiRepository.save(atleta);
-            mailgunSender.sendRegistrationEmail(atleta);
+            mailgunSender.sendRegistrationEmail(atleta, "Registrazione completata!", "grazie per esserti registrato!");
             return atleta;
         }
     }
