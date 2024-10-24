@@ -20,7 +20,7 @@ public class PartiteService {
     private PartiteRepository partiteRepository;
 
     public Page<Partita> findAll(int page, int size, String sortBy) {
-        if (page > 20) page = 20;
+        if (page > 100) page = 100;
         Sort sort = sortBy.equals("data")
                 ? Sort.by(Sort.Direction.DESC, "data")
                 : Sort.by(sortBy);
