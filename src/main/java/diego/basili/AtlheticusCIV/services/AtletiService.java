@@ -9,10 +9,7 @@ import diego.basili.AtlheticusCIV.enums.Ruolo;
 import diego.basili.AtlheticusCIV.enums.RuoloInCampo;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.exceptions.NotFoundException;
-import diego.basili.AtlheticusCIV.payloads.AtletaAuthorizationDTO;
-import diego.basili.AtlheticusCIV.payloads.AtletaDTO;
-import diego.basili.AtlheticusCIV.payloads.RuoliInCampoDTO;
-import diego.basili.AtlheticusCIV.payloads.ValutazioneDTO;
+import diego.basili.AtlheticusCIV.payloads.*;
 import diego.basili.AtlheticusCIV.repositories.AtletiRepository;
 import diego.basili.AtlheticusCIV.tools.MailgunSender;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,6 +152,15 @@ public class AtletiService {
         return atletiRepository.save(found);
     }
 
-
+    public Atleta updateStorico(UUID atletaId, AtletaValoriDTO body) {
+        Atleta found = findById(atletaId);
+            found.setMediaGol(body.mediaGol());
+            found.setMediaAssist(body.mediaAssist());
+            found.setMediaVoti(body.mediaVoti());
+            found.setPartiteGiocate(body.partiteGiocate());
+            found.setTotaleGol(body.totaleGol());
+            found.setTotaleAssist(body.totaleAssist());
+            return atletiRepository.save(found);
+    }
 
 }

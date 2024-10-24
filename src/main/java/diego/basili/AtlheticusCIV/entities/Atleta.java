@@ -109,12 +109,11 @@ public class Atleta implements UserDetails {
 
     public void aggiornaMediaVoti(Statistica statistica) {
         if (statistica.getVoti().isEmpty()) {
-            this.mediaVoti = 0.0; // Se non ci sono voti per quella statistica, la media rimane 0
+            this.mediaVoti = 0.0;
         } else {
-            // Calcola la media dei voti solo per la statistica passata
             this.mediaVoti = statistica.getVoti()
                     .stream()
-                    .mapToDouble(Voto::getVoto)  // Assumendo che 'getVoto()' restituisca il valore del voto
+                    .mapToDouble(Voto::getVoto)
                     .average()
                     .orElse(0.0);
         }
