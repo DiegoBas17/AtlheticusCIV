@@ -6,6 +6,7 @@ import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.exceptions.UnauthorizedException;
 import diego.basili.AtlheticusCIV.payloads.AtletaAuthorizationDTO;
 import diego.basili.AtlheticusCIV.payloads.AtletaDTO;
+import diego.basili.AtlheticusCIV.payloads.AtletaValoriDTO;
 import diego.basili.AtlheticusCIV.payloads.RuoliInCampoDTO;
 import diego.basili.AtlheticusCIV.services.AtletiService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +122,18 @@ public class AtletiController {
         Atleta targetAtleta = findById(atletaId);
         checkAuthorization(currentAuthenticatedAtleta, targetAtleta);
         return atletiService.updateAuthorization(atletaId, body);
+    }
+
+    @PutMapping("/{atletaId}/storico")
+    @PreAuthorize("hasAnyAuthority('ADMIN', 'SUPERADMIN')")
+    public Atleta updateStorico(@PathVariable UUID atletaId, @RequestBody @Validated AtletaValoriDTO body, BindingResult validationResult) {
+        if (validationResult.hasErrors()) {
+            String messages = validationResult.getAllErrors().stream()
+                    .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                    .collect(Collectors.joining(". "));
+            throw new BadRequestException("Ci sono stati errori nel payload. " + messages);
+        }
+        return this.atletiService.updateStorico(atletaId, body);
     }
 
     private void checkAuthorization(Atleta currentAuthenticatedAtleta, Atleta targetAtleta) {
