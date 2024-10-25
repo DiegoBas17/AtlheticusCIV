@@ -29,17 +29,17 @@ public class PartiteService {
     }
 
     public Partita savePartita(PartitaDTO body) {
-        TipoPartita tipoPartita;
         if (body == null) {
             throw new BadRequestException("Devi inserire il body del Partita!");
-        } else if (partiteRepository.existsByData(body.data())) {
-            throw new BadRequestException("Questo Partita è gia presente!");
-        } else {
-            try {
-                tipoPartita = TipoPartita.valueOf(body.tipoPartita().toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new BadRequestException("Ruolo utente non valido: " + body.tipoPartita() + " i ruoli disponibili sono: NORMALE o ORGANIZZATORE!");
-            }
+        }
+        TipoPartita tipoPartita;
+        try {
+            tipoPartita = TipoPartita.valueOf(body.tipoPartita().toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new BadRequestException("Tipo di partita non valido: " + body.tipoPartita() + " i tipi disponibili sono: CALCIO, CALCETTO o CALCIOTTO!");
+        }
+        if (partiteRepository.existsByDataAndTipoPartita(body.data(), tipoPartita)) {
+            throw new BadRequestException("Una partita con questa data e tipo esiste già!");
         }
         Partita partita = new Partita(body.data(), body.luogo(), tipoPartita);
         return partiteRepository.save(partita);
