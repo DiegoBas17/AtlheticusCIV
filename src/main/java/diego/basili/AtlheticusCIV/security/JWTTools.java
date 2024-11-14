@@ -17,7 +17,7 @@ public class JWTTools {
     public String createToken(Atleta atleta) {
         return Jwts.builder()
                 .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24 * 7))
+                .expiration(new Date(System.currentTimeMillis() + 1000L * 60 * 60 * 24 * 90))
                 .subject(String.valueOf(atleta.getId()))
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
