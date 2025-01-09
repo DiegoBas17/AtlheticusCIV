@@ -30,7 +30,7 @@ public class NotizieController {
 
     @GetMapping
     public Page<Notizia> findAll(@RequestParam(defaultValue = "0") int page,
-                                 @RequestParam(defaultValue = "10") int size,
+                                 @RequestParam(defaultValue = "9") int size,
                                  @RequestParam(defaultValue = "titolo") String sortBy) {
         return notizieService.findAll(page, size, sortBy);
     }
