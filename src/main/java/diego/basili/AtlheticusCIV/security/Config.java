@@ -45,7 +45,7 @@ public class Config {
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://handsome-verna-pollito117-551d08b7.koyeb.app/")); /*aggiungere dopo*/
+        configuration.setAllowedOrigins(Arrays.asList("http://localhost:5173", "https://athleticusciv.netlify.app")); /*aggiungere dopo*/
         configuration.setAllowedMethods(Arrays.asList("*"));
         configuration.setAllowedHeaders(Arrays.asList("*"));
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
