@@ -11,9 +11,9 @@ import java.util.Map;
 @Configuration
 public class PostConfig {
     @Bean
-    public Cloudinary coverUploader(@Value("${cloudinary_name}") String name,
-                                    @Value("${cloudinary_key}") String key,
-                                    @Value("${cloudinary_secret}") String secret) {
+    public Cloudinary coverUploader(@Value("${cloudinary.name}") String name,
+                                    @Value("${cloudinary.key}") String key,
+                                    @Value("${cloudinary.secret}") String secret) {
         Map<String, String> configuration = new HashMap<>();
         configuration.put("cloud_name", name);
         configuration.put("api_key", key);
