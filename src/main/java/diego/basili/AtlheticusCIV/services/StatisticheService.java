@@ -9,6 +9,7 @@ import diego.basili.AtlheticusCIV.enums.TipoPartita;
 import diego.basili.AtlheticusCIV.exceptions.BadRequestException;
 import diego.basili.AtlheticusCIV.exceptions.NotFoundException;
 import diego.basili.AtlheticusCIV.payloads.StatisticaDTO;
+import diego.basili.AtlheticusCIV.repositories.AtletiRepository;
 import diego.basili.AtlheticusCIV.repositories.StatisticheRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,8 @@ public class StatisticheService {
     private PartiteService partiteService;
     @Autowired
     private AtletiService atletiService;
+    @Autowired
+    private AtletiRepository atletiRepository;
 
     public Page<Statistica> findAll(int page, int size, String sortBy) {
         if (page > 20) page = 20;
@@ -90,12 +93,18 @@ public class StatisticheService {
         catch (IllegalArgumentException e) {
             throw new BadRequestException("Tipo partita non valido!");
         }
-        statistica.setAssist(body.assist());
+        long differenzaGol = body.gol() - statistica.getGol();
+        long differenzaAssist = body.assist() - statistica.getAssist();
         statistica.setGol(body.gol());
+        statistica.setAssist(body.assist());
         statistica.setColoreSquadra(coloreSquadra);
         statistica.setTipoPartita(tipoPartita);
         Atleta atleta = atletiService.findById(statistica.getAtleta().getId());
-        atletiService.addStatistica(atleta, statistica);
+        atleta.setTotaleGol(atleta.getTotaleGol() + differenzaGol);
+        atleta.setTotaleAssist(atleta.getTotaleAssist() + differenzaAssist);
+        atleta.aggiornaMediaGol();
+        atleta.aggiornaMediaAssist();
+        atletiRepository.save(atleta);
         return statisticheRepository.save(statistica);
     }
 
