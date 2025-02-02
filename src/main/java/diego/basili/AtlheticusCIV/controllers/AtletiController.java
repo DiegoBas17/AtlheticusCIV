@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -65,10 +66,8 @@ public class AtletiController {
 
     @GetMapping
     @PreAuthorize("hasAnyAuthority('VISITATORE', 'ATLETA','ADMIN', 'SUPERADMIN')")
-    public Page<Atleta> findAll(@RequestParam(defaultValue = "0") int page,
-                              @RequestParam(defaultValue = "50") int size,
-                              @RequestParam(defaultValue = "id") String sortBy) {
-        return this.atletiService.findAll(page, size, sortBy);
+    public List<Atleta> findAll() {
+        return this.atletiService.findAll();
     }
 
     @GetMapping("/{atletaId}")

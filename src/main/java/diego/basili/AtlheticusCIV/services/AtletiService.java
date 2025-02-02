@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -73,10 +74,9 @@ public class AtletiService {
         return atletiRepository.findByEmail(email).orElseThrow(() -> new NotFoundException("L'atleta con l'email " + email + " non è stato trovato!"));
     }
 
-    public Page<Atleta> findAll(int page, int size, String sortBy) {
-        if (page > 20) page = 20;
-        Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
-        return this.atletiRepository.findAll(pageable);
+    public List<Atleta> findAll() {
+        Sort sort = Sort.by(Sort.Order.asc("nome"));
+        return this.atletiRepository.findAll(sort);
     }
 
     public void findByIdAndDelete(UUID atletaId) {
