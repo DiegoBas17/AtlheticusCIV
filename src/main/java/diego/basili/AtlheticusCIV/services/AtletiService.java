@@ -75,8 +75,7 @@ public class AtletiService {
     }
 
     public List<Atleta> findAll() {
-        Sort sort = Sort.by(Sort.Order.asc("nome"));
-        return this.atletiRepository.findAll(sort);
+        return this.atletiRepository.findAll();
     }
 
     public void findByIdAndDelete(UUID atletaId) {
