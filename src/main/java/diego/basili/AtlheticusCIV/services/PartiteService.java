@@ -45,13 +45,13 @@ public class PartiteService {
         return partiteRepository.save(partita);
     }
 
-    public Partita findById(UUID ruoloId) {
-        return partiteRepository.findById(ruoloId).orElseThrow(() -> new NotFoundException(ruoloId));
+    public Partita findById(UUID partitaId) {
+        return partiteRepository.findById(partitaId).orElseThrow(() -> new NotFoundException(partitaId));
     }
 
-    public void delete(UUID ruoloId) {
-        Partita ruolo = findById(ruoloId);
-        partiteRepository.delete(ruolo);
+    public void delete(UUID partitaId) {
+        Partita partita = findById(partitaId);
+        partiteRepository.delete(partita);
     }
 
     public Partita findByIdAndUpdate(UUID partitaId, PartitaDTO updateBody) {
@@ -60,7 +60,7 @@ public class PartiteService {
             try {
                 tipoPartita = TipoPartita.valueOf(updateBody.tipoPartita().toUpperCase());
             } catch (IllegalArgumentException e) {
-                throw new BadRequestException("Ruolo utente non valido: " + updateBody.tipoPartita() + " i ruoli disponibili sono: NORMALE o ORGANIZZATORE!");
+                throw new BadRequestException("Tipo partita non valido: " + updateBody.tipoPartita());
             }
             found.setData(updateBody.data());
             found.setLuogo(updateBody.luogo());
